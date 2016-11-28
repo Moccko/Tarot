@@ -11,6 +11,7 @@ import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.jmx.*;
 import com.sun.javafx.sg.prism.NGNode;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.application.Application;
@@ -28,8 +29,9 @@ import javafx.stage.Stage;
  */
 public class View extends Application implements Observer {
 
-   private final String CARDS_DIRECTORY = "./Images/cards/";
+   private final String CARDS_DIRECTORY = "../Images/cards/";
    private final String WALLPAPER_DIRECTORY = "../Images/wallpaper.jpg";
+   private final String wallpaper = View.class.getResource("wallpaper.jpg").toExternalForm();
 
    @Override
    public void start ( Stage primaryStage ) {
@@ -50,17 +52,17 @@ public class View extends Application implements Observer {
 	 }
       });
 
-      Group root = new Group();
-      root.getChildren().add(_wallpaper);
+      StackPane root = new StackPane();
       Group _board = new Group();
-      
+
       _board.getChildren().add(btn);
       root.getChildren().add(_board);
-
+      //root.setStyle("-fx-background-image: url(\"" + wallpaper + "\"); -fx-background-repeat: stretch;");
       Scene scene = new Scene(root, 300, 250);
 
       primaryStage.setTitle("Hello World!");
       primaryStage.setScene(scene);
+      scene.getStylesheets().add(View.class.getResource("style.css").toExternalForm());
       primaryStage.show();
    }
 
@@ -73,7 +75,6 @@ public class View extends Application implements Observer {
 
    @Override
    public void update ( Observable o, Object arg ) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
    }
-
 }
