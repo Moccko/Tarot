@@ -5,7 +5,7 @@
  */
 package Controler;
 
-import Model.BoardModel;
+import Model.DeckModel;
 
 /**
  *
@@ -13,9 +13,9 @@ import Model.BoardModel;
  */
 public class DeckControler {
 
-   private BoardModel _model;
+   private DeckModel _model;
 
-   public DeckControler ( BoardModel _model ) {
+   public DeckControler ( DeckModel _model ) {
       this._model = _model;
    }
 

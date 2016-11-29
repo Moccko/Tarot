@@ -5,8 +5,8 @@
  */
 package View;
 
-import Controler.DeckControler;
-import Model.BoardModel;
+import Controler.*;
+import Model.*;
 import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.jmx.*;
@@ -35,7 +35,7 @@ public class BoardView extends Application implements Observer {
    @Override
    public void start ( Stage primaryStage ) {
       BoardModel _model = new BoardModel();
-      DeckControler _controler = new DeckControler(_model);
+      BoardControler _controler = new BoardControler(_model);
       _model.addObserver(this);
 
       Image _img_wlp = new Image("file:" + WALLPAPER_DIRECTORY);
