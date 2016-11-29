@@ -19,4 +19,9 @@ public class BoardControler {
       this._model = _model;
    }
 
+   public void distribute () {
+      for (int i = 0; i < 3; i++) {
+
+      }
+   }
 }

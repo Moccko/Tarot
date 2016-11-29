@@ -14,6 +14,7 @@ import com.sun.javafx.sg.prism.NGNode;
 import java.net.URL;
 import java.util.*;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
@@ -42,12 +43,8 @@ public class BoardView extends Application implements Observer {
 
       Button btn = new Button();
       btn.setText("Say 'Hello World'");
-      btn.setOnAction(new EventHandler<ActionEvent>() {
-
-	 @Override
-	 public void handle ( ActionEvent event ) {
-	    System.out.println("Hello World!");
-	 }
+      btn.setOnAction(( ActionEvent event ) -> {
+	 System.out.println("Hello World!");
       });
 
       StackPane root = new StackPane();
@@ -60,7 +57,7 @@ public class BoardView extends Application implements Observer {
 
       primaryStage.setTitle("Hello World!");
       primaryStage.setScene(scene);
-      scene.getStylesheets().add(View.BoardView.class.getResource("style.css").toExternalForm());
+      scene.getStylesheets().add(BoardView.class.getResource("style.css").toExternalForm());
       primaryStage.show();
    }
 

@@ -15,6 +15,7 @@ import java.util.Observable;
 public class BoardModel extends Observable {
 
    private final DeckModel _original_deck, _dog, _player_1, _player_2, _player_3, _player_4;
+   private Boolean _finished;
 
    public BoardModel () {
       super();
@@ -24,6 +25,7 @@ public class BoardModel extends Observable {
       _player_2 = new DeckModel(0, 1);
       _player_3 = new DeckModel(1, 0);
       _player_4 = new DeckModel(2, 1);
+      _finished = false;
    }
 
    private DeckModel getCards () {
@@ -56,5 +58,17 @@ public class BoardModel extends Observable {
       }
       deck.add(new CardModel());
       return deck;
+   }
+
+   public void distribute () {
+      CardModel card = new CardModel();
+      setChanged();
+      notifyObservers(card); // à voir plus tard
+   }
+
+   public void setFinished () {
+      _finished = true;
+      setChanged();
+      notifyObservers();
    }
 }

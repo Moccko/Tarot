@@ -15,12 +15,14 @@ public class DeckModel extends Observable {
 
    private LinkedList<CardModel> _cards;
    private final int _x, _y;
+   private Boolean _spread;
 
    public DeckModel ( int x, int y ) {
       super();
       _cards = new LinkedList<>();
       _x = x;
       _y = x;
+      _spread = false;
    }
 
    public DeckModel ( Collection<CardModel> c, int x, int y ) {
@@ -53,5 +55,11 @@ public class DeckModel extends Observable {
 
    void add ( CardModel card ) {
       _cards.add(card);
+   }
+
+   void setSpread () {
+      _spread = true;
+      setChanged();
+      notifyObservers();
    }
 }

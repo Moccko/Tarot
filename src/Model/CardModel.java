@@ -16,11 +16,13 @@ public class CardModel extends Observable {
 
    private final COLOR _color;
    private int _value;
+   private Boolean _visible;
 
    public CardModel ( COLOR _color, int _value ) {
       super();
       this._color = _color;
       this._value = _value;
+      _visible = false;
    }
 
    public CardModel () {
@@ -33,6 +35,12 @@ public class CardModel extends Observable {
 
    public int getValue () {
       return _value;
+   }
+
+   public void setVisible () {
+      _visible = true;
+      setChanged();
+      notifyObservers();
    }
 
 }

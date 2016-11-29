@@ -15,21 +15,33 @@ import java.util.*;
 public class DeckView extends LinkedList<CardView> implements Observer {
 
    private final DeckModel _model;
+   private final String _path;
    private final ORIENTATION _orientation;
 
    public DeckView ( DeckModel deck, String path, ORIENTATION orientation ) {
       super();
       _model = deck;
+      _path = path;
       _orientation = orientation;
-      for (CardModel card : deck.getCards()) {
+      deck.getCards().forEach(( card ) -> {
 	 add(new CardView(card, path));
-      }
+      });
       deck.addObserver(this);
    }
 
    @Override
    public void update ( Observable o, Object arg ) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      _model.getCards().forEach(( card ) -> {
+	 add(new CardView(card, _path));
+      });
    }
 
+   public void spread () {
+      switch (_orientation) {
+	 case VERTICAL:
+	    break;
+	 case HORIZONTAL:
+	    break;
+      }
+   }
 }
