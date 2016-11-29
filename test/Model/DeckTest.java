@@ -5,13 +5,14 @@
  */
 package Model;
 
-import java.util.LinkedList.*;
+import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import Model.*;
 
 /**
  *
@@ -23,6 +24,10 @@ public class DeckTest {
     }
     
  
+    //TODO: Tester giveCard
+    
+    
+    
     /**
      * Test of giveCard method, of class Deck.
      */
@@ -39,61 +44,22 @@ public class DeckTest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of getX method, of class Deck.
-     */
-    @Test
-    public void testGetX() {
-        System.out.println("getX");
-        Deck instance = null;
-        int expResult = 0;
-        int result = instance.getX();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+  
 
-    /**
-     * Test of getY method, of class Deck.
-     */
-    @Test
-    public void testGetY() {
-        System.out.println("getY");
-        Deck instance = null;
-        int expResult = 0;
-        int result = instance.getY();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCards method, of class Deck.
-     */
-  /*  @Test
-    public void testGetCards() {
-        System.out.println("getCards");
-        Deck instance = null;
-        LinkedList<Card> expResult = null;
-        LinkedList<Card> result = instance.getCards();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     /**
      * Test of add method, of class Deck.
      */
-    /*@Test
+    @Test
     public void testAdd() {
         System.out.println("add");
         Card card = new Card(COLOR.SPADE, 2);
-        Card cardexp = null;
+        Card cardexp = new Card(COLOR.SPADE, 2);
         Deck instance = new Deck (0,0);
         instance.add(card);
-        assertEquals (instance._cards.getLast(), cardexp);
+        assertEquals (instance.getCards().getLast(), cardexp);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    */
+    
 }
