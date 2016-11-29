@@ -14,12 +14,12 @@ import java.util.*;
  */
 public class DeckView extends LinkedList<CardView> {
 
-   private final Deck _deck;
+   private final DeckModel _deck;
 
-   public DeckView ( Deck _deck, String path ) {
+   public DeckView ( DeckModel _deck, String path ) {
       super();
       this._deck = _deck;
-      for (Card card : _deck.getCards()) {
+      for (CardModel card : _deck.getCards()) {
 	 add(new CardView(card, path));
       }
    }

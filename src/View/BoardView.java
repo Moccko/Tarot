@@ -5,8 +5,8 @@
  */
 package View;
 
-import Controler.Controler;
-import Model.Board;
+import Controler.DeckControler;
+import Model.BoardModel;
 import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.jmx.*;
@@ -27,16 +27,15 @@ import javafx.stage.Stage;
  *
  * @author Roman
  */
-public class View extends Application implements Observer {
+public class BoardView extends Application implements Observer {
 
    private final String CARDS_DIRECTORY = "../Images/cards/";
    private final String WALLPAPER_DIRECTORY = "../Images/wallpaper.jpg";
-   private final String wallpaper = View.class.getResource("wallpaper.jpg").toExternalForm();
 
    @Override
    public void start ( Stage primaryStage ) {
-      Board _model = new Board();
-      Controler _controler = new Controler(_model);
+      BoardModel _model = new BoardModel();
+      DeckControler _controler = new DeckControler(_model);
       _model.addObserver(this);
 
       Image _img_wlp = new Image("file:" + WALLPAPER_DIRECTORY);
@@ -62,7 +61,7 @@ public class View extends Application implements Observer {
 
       primaryStage.setTitle("Hello World!");
       primaryStage.setScene(scene);
-      scene.getStylesheets().add(View.class.getResource("style.css").toExternalForm());
+      scene.getStylesheets().add(View.BoardView.class.getResource("style.css").toExternalForm());
       primaryStage.show();
    }
 

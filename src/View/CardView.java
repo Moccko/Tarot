@@ -5,7 +5,7 @@
  */
 package View;
 
-import Model.Card;
+import Model.CardModel;
 import javafx.scene.image.*;
 
 /**
@@ -14,16 +14,15 @@ import javafx.scene.image.*;
  */
 public class CardView {
 
-   private final Image _image_front, _image_back;
-   private ImageView _card_front, _card_back;
-   private final Card card;
+   private Image _image_front, _image_back;
+   private ImageView _card_view;
+   private CardModel _card;
 
-   public CardView ( Card card, String path ) {
-      this.card = card;
+   public CardView ( CardModel card, String path ) {
+      this._card = card;
       _image_front = new Image("file:" + path + card.getColor() + "_" + card.getValue() + ".jpg");
       _image_back = new Image("file:" + path + "BACK.jpg");
-      _card_front.setImage(_image_front);
-      _card_back.setImage(_image_back);
+      _card_view = new ImageView(_image_front);
    }
 
 }

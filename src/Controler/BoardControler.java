@@ -5,17 +5,17 @@
  */
 package Controler;
 
-import Model.Board;
+import Model.BoardModel;
 
 /**
  *
  * @author Roman
  */
-public class Controler {
+public class BoardControler {
 
-   private final Board _model;
+   private BoardModel _model;
 
-   public Controler ( Board _model ) {
+   public BoardControler ( BoardModel _model ) {
       this._model = _model;
    }
 

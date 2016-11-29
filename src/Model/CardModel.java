@@ -12,17 +12,17 @@ import java.util.Observable;
  *
  * @author Roman
  */
-public class Card extends Observable {
+public class CardModel extends Observable {
 
    private final COLOR _color;
    private int _value;
 
-   public Card ( COLOR _color, int _value ) {
+   public CardModel ( COLOR _color, int _value ) {
       this._color = _color;
       this._value = _value;
    }
 
-   public Card () {
+   public CardModel () {
       this._color = EXCUSE;
    }
 

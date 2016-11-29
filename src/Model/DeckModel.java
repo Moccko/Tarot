@@ -11,25 +11,25 @@ import java.util.*;
  *
  * @author Roman
  */
-public class Deck extends Observable {
+public class DeckModel extends Observable {
 
-   private LinkedList<Card> _cards;
+   private LinkedList<CardModel> _cards;
    private final int _x, _y;
 
-   public Deck ( int x, int y ) {
+   public DeckModel ( int x, int y ) {
       super();
       _cards = new LinkedList<>();
       _x = x;
       _y = x;
    }
 
-   public Deck ( Collection<Card> c, int x, int y ) {
+   public DeckModel ( Collection<CardModel> c, int x, int y ) {
       _cards = new LinkedList<>(c);
       _x = x;
       _y = y;
    }
 
-   public Boolean giveCard ( Card toGive, Deck d ) {
+   public Boolean giveCard ( CardModel toGive, DeckModel d ) {
       if (_cards.remove(toGive)) {
 	 return (d.getCards().add(toGive));
       } else {
@@ -45,11 +45,11 @@ public class Deck extends Observable {
       return _y;
    }
 
-   public LinkedList<Card> getCards () {
+   public LinkedList<CardModel> getCards () {
       return _cards;
    }
 
-   void add ( Card card ) {
+   void add ( CardModel card ) {
       _cards.add(card);
    }
 }
