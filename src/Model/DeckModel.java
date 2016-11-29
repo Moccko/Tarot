@@ -24,14 +24,16 @@ public class DeckModel extends Observable {
    }
 
    public DeckModel ( Collection<CardModel> c, int x, int y ) {
+      super();
       _cards = new LinkedList<>(c);
+      Collections.shuffle(_cards);
       _x = x;
       _y = y;
    }
 
-   public Boolean giveCard ( CardModel toGive, DeckModel d ) {
+   public Boolean giveCard ( CardModel toGive, DeckModel deck ) {
       if (_cards.remove(toGive)) {
-	 return (d.getCards().add(toGive));
+	 return (deck.getCards().add(toGive));
       } else {
 	 return false;
       }

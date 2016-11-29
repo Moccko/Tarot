@@ -12,8 +12,7 @@ import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.jmx.*;
 import com.sun.javafx.sg.prism.NGNode;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -74,6 +73,6 @@ public class BoardView extends Application implements Observer {
 
    @Override
    public void update ( Observable o, Object arg ) {
-      
+
    }
 }

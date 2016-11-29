@@ -17,6 +17,7 @@ public class BoardModel extends Observable {
    private final DeckModel _original_deck, _dog, _player_1, _player_2, _player_3, _player_4;
 
    public BoardModel () {
+      super();
       _original_deck = getCards();
       _dog = new DeckModel(1, 1);
       _player_1 = new DeckModel(1, 2);

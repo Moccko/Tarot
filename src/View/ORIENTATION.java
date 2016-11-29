@@ -10,5 +10,6 @@ package View;
  * @author Roman
  */
 public enum ORIENTATION {
-   
+   VERTICAL,
+   HORIZONTAL;
 }

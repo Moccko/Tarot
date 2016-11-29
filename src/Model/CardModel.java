@@ -18,6 +18,7 @@ public class CardModel extends Observable {
    private int _value;
 
    public CardModel ( COLOR _color, int _value ) {
+      super();
       this._color = _color;
       this._value = _value;
    }

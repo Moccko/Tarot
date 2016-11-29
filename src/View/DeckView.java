@@ -12,16 +12,24 @@ import java.util.*;
  *
  * @author Roman
  */
-public class DeckView extends LinkedList<CardView> {
+public class DeckView extends LinkedList<CardView> implements Observer {
 
-   private final DeckModel _deck;
+   private final DeckModel _model;
+   private final ORIENTATION _orientation;
 
-   public DeckView ( DeckModel _deck, String path ) {
+   public DeckView ( DeckModel deck, String path, ORIENTATION orientation ) {
       super();
-      this._deck = _deck;
-      for (CardModel card : _deck.getCards()) {
+      _model = deck;
+      _orientation = orientation;
+      for (CardModel card : deck.getCards()) {
 	 add(new CardView(card, path));
       }
+      deck.addObserver(this);
+   }
+
+   @Override
+   public void update ( Observable o, Object arg ) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
    }
 
 }
