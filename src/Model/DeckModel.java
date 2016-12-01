@@ -33,12 +33,10 @@ public class DeckModel extends Observable {
       _y = y;
    }
 
-   public Boolean giveCard ( CardModel toGive, DeckModel deck ) {
-      if (_cards.remove(toGive)) {
-	 return (deck.getCards().add(toGive));
-      } else {
-	 return false;
-      }
+   public void giveCard ( CardModel toGive, DeckModel deck ) {
+      deck.getCards().add(toGive);
+      setChanged();
+      notifyObservers();
    }
 
    public int getX () {
@@ -61,5 +59,9 @@ public class DeckModel extends Observable {
       _spread = true;
       setChanged();
       notifyObservers();
+   }
+
+   void spread () {
+//      @TODO
    }
 }

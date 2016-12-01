@@ -5,7 +5,7 @@
  */
 package Controler;
 
-import Model.DeckModel;
+import Model.*;
 
 /**
  *
@@ -19,4 +19,7 @@ public class DeckControler {
       this._model = _model;
    }
 
+   public void give ( CardModel card, DeckModel deck ) {
+      _model.giveCard(card, deck);
+   }
 }

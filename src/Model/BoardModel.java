@@ -14,12 +14,12 @@ import java.util.Observable;
  */
 public class BoardModel extends Observable {
 
-   private final DeckModel _original_deck, _dog, _player_1, _player_2, _player_3, _player_4;
+   private final DeckModel _initial_deck, _dog, _player_1, _player_2, _player_3, _player_4;
    private Boolean _finished;
 
    public BoardModel () {
       super();
-      _original_deck = getCards();
+      _initial_deck = getCards();
       _dog = new DeckModel(1, 1);
       _player_1 = new DeckModel(1, 2);
       _player_2 = new DeckModel(0, 1);
@@ -38,19 +38,19 @@ public class BoardModel extends Observable {
 	    }
 	    switch (color) {
 	       case 0:
-		  deck.add(new CardModel(SPADE, color));
+		  deck.add(new CardModel(SPADE, value));
 		  break;
 	       case 1:
-		  deck.add(new CardModel(CLUB, color));
+		  deck.add(new CardModel(CLUB, value));
 		  break;
 	       case 2:
-		  deck.add(new CardModel(HEART, color));
+		  deck.add(new CardModel(HEART, value));
 		  break;
 	       case 3:
-		  deck.add(new CardModel(DIAMOND, color));
+		  deck.add(new CardModel(DIAMOND, value));
 		  break;
 	       case 4:
-		  deck.add(new CardModel(TRUMP, color));
+		  deck.add(new CardModel(TRUMP, value));
 		  break;
 	    }
 	    value++;
@@ -70,5 +70,29 @@ public class BoardModel extends Observable {
       _finished = true;
       setChanged();
       notifyObservers();
+   }
+
+   public DeckModel getInitial_deck () {
+      return _initial_deck;
+   }
+
+   public DeckModel getDog () {
+      return _dog;
+   }
+
+   public DeckModel getPlayer_1 () {
+      return _player_1;
+   }
+
+   public DeckModel getPlayer_2 () {
+      return _player_2;
+   }
+
+   public DeckModel getPlayer_3 () {
+      return _player_3;
+   }
+
+   public DeckModel getPlayer_4 () {
+      return _player_4;
    }
 }
