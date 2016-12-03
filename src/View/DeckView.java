@@ -28,8 +28,8 @@ public class DeckView extends Group implements Observer {
       _controler = controler;
       _path = path;
       _orientation = orientation;
-      getChildren().clear();
-      deck.getCards().forEach(( card ) -> {
+//      getChildren().clear();
+      _model.getCards().forEach(( card ) -> {
 	 getChildren().add(new CardView(card, path, orientation));
       }
       );
@@ -38,10 +38,25 @@ public class DeckView extends Group implements Observer {
 
    @Override
    public void update ( Observable o, Object arg ) {
-      _model.getCards().forEach(( card ) -> {
-	 getChildren().clear();
-	 getChildren().addAll(_model.getCards());
-      });
+//      DeckModel deck = (DeckModel) o;
+//      if (arg != null) {
+//	 switch (deck.getRole()) {
+//	    case RECEIVER:
+//	       
+//	       break;
+//	    case SENDER:
+//	       break;
+//	    default:
+//	       break;
+//	 }
+//      }
+
+//      getChildren().clear();
+//      _model.getCards().forEach(( card ) -> {
+//	 // we check that a CardView child corresponds to a CardModel in the DeckModel
+//
+//	 getChildren().add(new CardView(card, _path, _orientation));
+//      });
    }
 
    public DeckModel getModel () {
@@ -51,6 +66,8 @@ public class DeckView extends Group implements Observer {
    public void spread () {
       switch (_orientation) {
 	 case VERTICAL:
+	    // TODO : 
+
 	    break;
 	 case HORIZONTAL:
 	    break;
@@ -66,9 +83,15 @@ public class DeckView extends Group implements Observer {
 
    public void give ( CardView card, DeckView deck ) {
       _controler.give(card.getModel(), deck.getModel());
+      deck.getChildren().add(card);
+      getChildren().remove(card);
    }
 
    public CardView getChild ( int i ) {
       return (CardView) getChildren().get(i);
+   }
+
+   public CardView getLastChild () {
+      return getChild(getChildren().size() - 1);
    }
 }

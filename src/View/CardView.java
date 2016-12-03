@@ -16,7 +16,6 @@ import javafx.scene.image.*;
  */
 public class CardView extends ImageView implements Observer {
 
-   static private int count = 1;
    private final Image _image_front;
    private CardModel _model;
    private ORIENTATION _orientation;
@@ -34,7 +33,6 @@ public class CardView extends ImageView implements Observer {
 
       setCache(true);
       _model.addObserver(this);
-      count++;
    }
 
    @Override
@@ -56,4 +54,11 @@ public class CardView extends ImageView implements Observer {
    public CardModel getModel () {
       return _model;
    }
+
+   @Override
+   public String toString () {
+      return _model.getColor() + String.valueOf(_model.getValue()) + ", _orientation=" + _orientation + '}';
+   }
+   
+   
 }

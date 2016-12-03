@@ -20,16 +20,16 @@ public class BoardModel extends Observable {
    public BoardModel () {
       super();
       _initial_deck = getCards();
-      _dog = new DeckModel(1, 1);
-      _player_1 = new DeckModel(1, 2);
-      _player_2 = new DeckModel(0, 1);
-      _player_3 = new DeckModel(1, 0);
-      _player_4 = new DeckModel(2, 1);
+      _dog = new DeckModel();
+      _player_1 = new DeckModel();
+      _player_2 = new DeckModel();
+      _player_3 = new DeckModel();
+      _player_4 = new DeckModel();
       _finished = false;
    }
 
    private DeckModel getCards () {
-      DeckModel deck = new DeckModel(2, 0);
+      DeckModel deck = new DeckModel();
       for (int color = 0; color < 5; color++) {
 	 int value = 1;
 	 while (value < 22) {

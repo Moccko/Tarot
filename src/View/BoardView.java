@@ -8,8 +8,10 @@ package View;
 import Controler.*;
 import Model.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.*;
@@ -26,10 +28,11 @@ public class BoardView extends Application implements Observer {
    private final String WALLPAPER_DIRECTORY = ".resources/wallpaper.jpg";
 
    private DeckView _initial, _dog, _player_1, _player_2, _player_3, _player_4;
-   private AnchorPane _layout;
+   private ArrayList<DeckView> _decks;
+   private BorderPane _layout;
 
    @Override
-   public void start ( Stage primaryStage ) {
+   public void start ( Stage primaryStage ) throws InterruptedException {
       BoardModel _model = new BoardModel();
       BoardControler _controler = new BoardControler(_model);
       _model.addObserver(this);
@@ -44,36 +47,35 @@ public class BoardView extends Application implements Observer {
       _player_3 = new DeckView(_model.getPlayer_3(), _controler.getPlayer_3(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
       _player_4 = new DeckView(_model.getPlayer_4(), _controler.getPlayer_4(), CARDS_DIRECTORY, ORIENTATION.HORIZONTAL);
 
+      _decks = new ArrayList<>();
+      _decks.add(_player_1);
+      _decks.add(_player_2);
+      _decks.add(_player_3);
+      _decks.add(_player_4);
+
       Button btn = new Button();
       btn.setText("Say 'Hello World'");
       btn.setOnAction(( ActionEvent event ) -> {
-	 System.out.println("Hello World!");
+	 distribute();
       });
 
       StackPane root = new StackPane();
       Group _board = new Group();
 
-      _layout = new AnchorPane();
+      _layout = new BorderPane(_dog);
 
-      AnchorPane.setBottomAnchor(_player_1, 10.0d);
-      AnchorPane.setLeftAnchor(_player_2, 10.0d);
-      AnchorPane.setTopAnchor(_player_3, 10.0d);
-      AnchorPane.setTopAnchor(_initial, 10.0d);
-      AnchorPane.setRightAnchor(_player_4, 10.0d);
-      AnchorPane.setRightAnchor(_initial, 10.0d);
       _layout.getChildren().add(_initial);
-      _layout.getChildren().add(_player_1);
-      _layout.getChildren().add(_player_2);
-      _layout.getChildren().add(_player_3);
-      _layout.getChildren().add(_player_4);
+      _layout.setBottom(_player_1);
+      _layout.setLeft(_player_2);
+      _layout.setTop(_player_3);
+      _layout.setRight(_player_4);
+
+      BorderPane.setAlignment(_player_1, Pos.BOTTOM_CENTER);
+      BorderPane.setAlignment(_player_2, Pos.CENTER_LEFT);
+      BorderPane.setAlignment(_player_3, Pos.TOP_CENTER);
+      BorderPane.setAlignment(_player_4, Pos.CENTER_RIGHT);
 
       _board.getChildren().add(btn);
-//      _board.getChildren().add(_initial);
-//      _board.getChildren().add(_dog);
-//      _board.getChildren().add(_player_1);
-//      _board.getChildren().add(_player_2);
-//      _board.getChildren().add(_player_3);
-//      _board.getChildren().add(_player_4);
       root.getChildren().add(_layout);
 
 //      CardModel cartemodele = new CardModel(COLOR.CLUB, 5);
@@ -91,7 +93,6 @@ public class BoardView extends Application implements Observer {
       primaryStage.sizeToScene();
       scene.getStylesheets().add(BoardView.class.getResource("style.css").toExternalForm());
       _initial.flip();
-      distribute();
       primaryStage.show();
    }
 
@@ -108,14 +109,19 @@ public class BoardView extends Application implements Observer {
    }
 
    public void distribute () {
+      int cpt = 0;
       while (!_initial.getChildren().isEmpty()) {
-	 for (int i = 1; i < 5; i++) {
-	    DeckView deck = (DeckView) _layout.getChildren().get(i);
+	 for (DeckView deck : _decks) {
 	    for (int c = 0; c < 3; c++) {
-	       _initial.give(_initial.getChild(1), deck);
+	       _initial.give(_initial.getChild(0), deck);
+	       cpt++;
+	       System.out.println(deck.getLastChild());
 	    }
 	 }
-	 _initial.give(_initial.getChild(1), _dog);
+	 _initial.give(_initial.getChild(0), _dog);
+	 cpt++;
+	 System.out.println(_dog.getLastChild());
+
       }
    }
 }
