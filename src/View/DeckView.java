@@ -8,7 +8,9 @@ package View;
 import Controler.DeckControler;
 import Model.*;
 import java.util.*;
+import javafx.animation.TranslateTransition;
 import javafx.scene.*;
+import javafx.util.Duration;
 
 /**
  *
@@ -64,12 +66,25 @@ public class DeckView extends Group implements Observer {
    }
 
    public void spread () {
+      int cpt = -180;
       switch (_orientation) {
 	 case VERTICAL:
-	    // TODO : 
-
+	    for (Node card : getChildren()) {
+	       CardView cardview = (CardView) card;
+	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), cardview);
+	       tt.setToX(cpt);
+	       tt.play();
+	       cpt += 20;
+	    }
 	    break;
 	 case HORIZONTAL:
+	    for (Node card : getChildren()) {
+	       CardView cardview = (CardView) card;
+	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), cardview);
+	       tt.setToY(cpt);
+	       tt.play();
+	       cpt += 10;
+	    }
 	    break;
       }
    }
@@ -82,8 +97,11 @@ public class DeckView extends Group implements Observer {
    }
 
    public void give ( CardView card, DeckView deck ) {
+      
       _controler.give(card.getModel(), deck.getModel());
+      card.rotate(deck.getOrientation());
       deck.getChildren().add(card);
+      
       getChildren().remove(card);
    }
 
@@ -94,4 +112,10 @@ public class DeckView extends Group implements Observer {
    public CardView getLastChild () {
       return getChild(getChildren().size() - 1);
    }
+
+   public ORIENTATION getOrientation () {
+      return _orientation;
+   }
+   
+   
 }

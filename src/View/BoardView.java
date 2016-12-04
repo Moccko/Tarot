@@ -57,6 +57,12 @@ public class BoardView extends Application implements Observer {
       btn.setText("Say 'Hello World'");
       btn.setOnAction(( ActionEvent event ) -> {
 	 distribute();
+	 _decks.forEach(deck -> {
+	    deck.spread();
+	 });
+	 _player_1.flip();
+	 _dog.spread();
+	 _dog.flip();
       });
 
       StackPane root = new StackPane();
@@ -92,7 +98,6 @@ public class BoardView extends Application implements Observer {
       primaryStage.setScene(scene);
       primaryStage.sizeToScene();
       scene.getStylesheets().add(BoardView.class.getResource("style.css").toExternalForm());
-      _initial.flip();
       primaryStage.show();
    }
 

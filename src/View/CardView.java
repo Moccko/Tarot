@@ -28,7 +28,7 @@ public class CardView extends ImageView implements Observer {
       _image_front = new Image("file:" + path + card.getColor() + "_" + card.getValue() + ".jpg");
       _orientation = orientation;
       if (orientation == HORIZONTAL) {
-	 setRotate(90.0d);
+	 setRotate(90);
       }
 
       setCache(true);
@@ -44,7 +44,7 @@ public class CardView extends ImageView implements Observer {
       setImage(_image_front);
    }
 
-   private void rotate ( ORIENTATION orientation ) {
+   public void rotate ( ORIENTATION orientation ) {
       if (orientation != _orientation) {
 	 _orientation = orientation;
 	 setRotate(90.0d);
