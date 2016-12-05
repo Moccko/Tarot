@@ -9,7 +9,7 @@ package Model;
  *
  * @author Roman
  */
-public enum COLOR {
+public enum COLOR implements Comparable<COLOR> {
    SPADE,
    CLUB,
    HEART,

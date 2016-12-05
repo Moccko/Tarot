@@ -12,10 +12,10 @@ import java.util.Observable;
  *
  * @author Roman
  */
-public class CardModel extends Observable {
+public class CardModel extends Observable implements Comparable<CardModel> {
 
    private final COLOR _color;
-   private int _value;
+   private final Integer _value;
    private Boolean _visible;
 
    public CardModel ( COLOR _color, int _value ) {
@@ -27,6 +27,7 @@ public class CardModel extends Observable {
 
    public CardModel () {
       this._color = EXCUSE;
+      _value = 0;
    }
 
    public COLOR getColor () {
@@ -41,6 +42,12 @@ public class CardModel extends Observable {
       _visible = true;
       setChanged();
       notifyObservers();
+   }
+
+   @Override
+   public int compareTo ( CardModel o ) {
+      int cmp = _color.compareTo(o.getColor());
+      return (cmp != 0 ? cmp : _value.compareTo(o.getValue()));
    }
 
 }

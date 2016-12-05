@@ -25,11 +25,16 @@ public class DeckModel extends Observable {
       _role = NONE;
    }
 
-   public DeckModel ( Collection<CardModel> c ) {
-      super();
-      _cards = new ArrayList<>(c);
+   public void shuffle () {
       Collections.shuffle(_cards);
-      _role = NONE;
+      setChanged();
+      notifyObservers();
+   }
+   
+   public void sort(){
+      Collections.sort(_cards);
+      setChanged();
+      notifyObservers();
    }
 
    public void giveCard ( CardModel toGive, DeckModel deck ) {

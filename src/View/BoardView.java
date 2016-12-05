@@ -8,7 +8,7 @@ package View;
 import Controler.*;
 import Model.*;
 import java.util.*;
-import java.util.logging.*;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -16,7 +16,9 @@ import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -34,18 +36,18 @@ public class BoardView extends Application implements Observer {
    @Override
    public void start ( Stage primaryStage ) throws InterruptedException {
       BoardModel _model = new BoardModel();
-      BoardControler _controler = new BoardControler(_model);
+      BoardController _controller = new BoardController(_model);
       _model.addObserver(this);
 
       Image _img_wlp = new Image("file:" + WALLPAPER_DIRECTORY);
       ImageView _wallpaper = new ImageView(_img_wlp);
 
-      _initial = new DeckView(_model.getInitial_deck(), _controler.getInitial_deck(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
-      _dog = new DeckView(_model.getDog(), _controler.getDog(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
-      _player_1 = new DeckView(_model.getPlayer_1(), _controler.getPlayer_1(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
-      _player_2 = new DeckView(_model.getPlayer_2(), _controler.getPlayer_2(), CARDS_DIRECTORY, ORIENTATION.HORIZONTAL);
-      _player_3 = new DeckView(_model.getPlayer_3(), _controler.getPlayer_3(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
-      _player_4 = new DeckView(_model.getPlayer_4(), _controler.getPlayer_4(), CARDS_DIRECTORY, ORIENTATION.HORIZONTAL);
+      _initial = new DeckView(_model.getInitial_deck(), _controller.getInitial_deck(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
+      _dog = new DeckView(_model.getDog(), _controller.getDog(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
+      _player_1 = new DeckView(_model.getPlayer_1(), _controller.getPlayer_1(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
+      _player_2 = new DeckView(_model.getPlayer_2(), _controller.getPlayer_2(), CARDS_DIRECTORY, ORIENTATION.HORIZONTAL);
+      _player_3 = new DeckView(_model.getPlayer_3(), _controller.getPlayer_3(), CARDS_DIRECTORY, ORIENTATION.VERTICAL);
+      _player_4 = new DeckView(_model.getPlayer_4(), _controller.getPlayer_4(), CARDS_DIRECTORY, ORIENTATION.HORIZONTAL);
 
       _decks = new ArrayList<>();
       _decks.add(_player_1);
@@ -54,14 +56,14 @@ public class BoardView extends Application implements Observer {
       _decks.add(_player_4);
 
       Button btn = new Button();
-      btn.setText("Say 'Hello World'");
+      btn.setText("Distribute");
       btn.setOnAction(( ActionEvent event ) -> {
 	 distribute();
 	 _decks.forEach(deck -> {
 	    deck.spread();
 	 });
-	 _player_1.flip();
 	 _dog.spread();
+	 _player_1.flip();
 	 _dog.flip();
       });
 
@@ -85,12 +87,18 @@ public class BoardView extends Application implements Observer {
       root.getChildren().add(_layout);
 
 //      CardModel cartemodele = new CardModel(COLOR.CLUB, 5);
-//      try {
-//	 CardView carte = new CardView(cartemodele, CARDS_DIRECTORY);
-//	 _board.getChildren().add(carte);
-//      } catch (NoCards ex) {
-//	 Logger.getLogger(BoardView.class.getName()).log(Level.SEVERE, null, ex);
-//      }
+//      CardView carte = new CardView(cartemodele, CARDS_DIRECTORY, ORIENTATION.VERTICAL);
+//      _layout.getChildren().add(carte);
+
+//      carte.setRotationAxis(Rotate.X_AXIS);
+//      Timeline tl = new Timeline(
+//	      new KeyFrame(new Duration(1000), new KeyValue(carte.rotateProperty(), 90)),
+//	      new KeyFrame(new Duration(1000), new KeyValue(carte.imageProperty(), carte.getImage_front())),
+//	      new KeyFrame(new Duration(2000), new KeyValue(carte.rotateProperty(), 0)),
+//	      new KeyFrame(new Duration(2000), new KeyValue(carte.rotationAxisProperty(), Rotate.Z_AXIS)),
+//	      new KeyFrame(new Duration(2500), new KeyValue(carte.rotateProperty(), 90)));
+//      tl.play();
+
       root.getChildren().add(_board);
       Scene scene = new Scene(root, 800, 600);
 
@@ -114,19 +122,16 @@ public class BoardView extends Application implements Observer {
    }
 
    public void distribute () {
+      _initial.shuffle();
       int cpt = 0;
       while (!_initial.getChildren().isEmpty()) {
 	 for (DeckView deck : _decks) {
 	    for (int c = 0; c < 3; c++) {
 	       _initial.give(_initial.getChild(0), deck);
-	       cpt++;
-	       System.out.println(deck.getLastChild());
 	    }
+	    System.out.println(cpt++);
 	 }
 	 _initial.give(_initial.getChild(0), _dog);
-	 cpt++;
-	 System.out.println(_dog.getLastChild());
-
       }
    }
 }

@@ -11,15 +11,25 @@ import Model.*;
  *
  * @author Roman
  */
-public class DeckControler {
+public class DeckController {
 
    private DeckModel _model;
 
-   public DeckControler ( DeckModel _model ) {
+   public DeckController ( DeckModel _model ) {
       this._model = _model;
    }
 
    public void give ( CardModel card, DeckModel deck ) {
+      _model.setRole(ROLE.SENDER);
+      deck.setRole(ROLE.RECEIVER);
       _model.giveCard(card, deck);
+   }
+   
+   public void shuffle(){
+      _model.shuffle();
+   }
+   
+   public void sort(){
+      _model.sort();
    }
 }

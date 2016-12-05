@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controler.DeckControler;
+import Controler.DeckController;
 import Model.*;
 import java.util.*;
 import javafx.animation.TranslateTransition;
@@ -20,14 +20,14 @@ public class DeckView extends Group implements Observer {
 
    private final DeckModel _model;
 
-   private final DeckControler _controler;
+   private final DeckController _controller;
    private final String _path;
    private final ORIENTATION _orientation;
 
-   public DeckView ( DeckModel deck, DeckControler controler, String path, ORIENTATION orientation ) {
+   public DeckView ( DeckModel deck, DeckController controller, String path, ORIENTATION orientation ) {
       super();
       _model = deck;
-      _controler = controler;
+      _controller = controller;
       _path = path;
       _orientation = orientation;
 //      getChildren().clear();
@@ -40,13 +40,20 @@ public class DeckView extends Group implements Observer {
 
    @Override
    public void update ( Observable o, Object arg ) {
-//      DeckModel deck = (DeckModel) o;
+//      DeckModel model = (DeckModel) o;
 //      if (arg != null) {
-//	 switch (deck.getRole()) {
+//	 switch (model.getRole()) {
 //	    case RECEIVER:
-//	       
+//	       getChildren().add(new CardView((CardModel) arg, _path, _orientation));
+//	       model.setRole(ROLE.NONE);
 //	       break;
 //	    case SENDER:
+//	       for (int i = 0; i < getChildren().size() - 1; i++) {
+//		  if (getChild(i).getModel() == (CardModel) arg) {
+//		     getChildren().remove((CardView) getChild(i));
+//		  }
+//	       }
+//	       model.setRole(ROLE.NONE);
 //	       break;
 //	    default:
 //	       break;
@@ -66,7 +73,7 @@ public class DeckView extends Group implements Observer {
    }
 
    public void spread () {
-      int cpt = -180;
+      int cpt = -360;
       switch (_orientation) {
 	 case VERTICAL:
 	    for (Node card : getChildren()) {
@@ -74,7 +81,7 @@ public class DeckView extends Group implements Observer {
 	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), cardview);
 	       tt.setToX(cpt);
 	       tt.play();
-	       cpt += 20;
+	       cpt += 40;
 	    }
 	    break;
 	 case HORIZONTAL:
@@ -89,19 +96,31 @@ public class DeckView extends Group implements Observer {
       }
    }
 
+   public void shuffle () {
+      _controller.shuffle();
+   }
+
+   public void sort () {
+      _controller.sort();
+   }
+
    public void flip () {
       getChildren().forEach(( card ) -> {
 	 CardView carte = (CardView) card;
+//	 carte.toFront();
 	 carte.flip();
       });
    }
 
    public void give ( CardView card, DeckView deck ) {
-      
-      _controler.give(card.getModel(), deck.getModel());
+      _controller.give(card.getModel(), deck.getModel());
       card.rotate(deck.getOrientation());
+
+      TranslateTransition move = new TranslateTransition(Duration.millis(500), card);
+      move.setToX(deck.getLayoutX());
+      move.play();
+
       deck.getChildren().add(card);
-      
       getChildren().remove(card);
    }
 
@@ -116,6 +135,4 @@ public class DeckView extends Group implements Observer {
    public ORIENTATION getOrientation () {
       return _orientation;
    }
-   
-   
 }

@@ -8,7 +8,11 @@ package View;
 import Model.CardModel;
 import static View.ORIENTATION.*;
 import java.util.*;
+import javafx.animation.*;
+import javafx.geometry.Point3D;
 import javafx.scene.image.*;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 
 /**
  *
@@ -41,11 +45,24 @@ public class CardView extends ImageView implements Observer {
    }
 
    public void flip () {
-      setImage(_image_front);
+
+      this.setRotationAxis(Rotate.X_AXIS);
+      Timeline tl = new Timeline(
+	      new KeyFrame(new Duration(1000), new KeyValue(this.rotateProperty(), 90)),
+	      new KeyFrame(new Duration(1000), new KeyValue(this.imageProperty(), _image_front)),
+	      new KeyFrame(new Duration(2000), new KeyValue(this.rotateProperty(), 0)));
+
+      tl.play();
    }
 
    public void rotate ( ORIENTATION orientation ) {
       if (orientation != _orientation) {
+
+	 this.setRotationAxis(Rotate.Z_AXIS);
+	 Timeline tl = new Timeline(new KeyFrame(new Duration(500), new KeyValue(this.rotateProperty(), 90)));
+
+	 tl.play();
+
 	 _orientation = orientation;
 	 setRotate(90.0d);
       }
@@ -55,10 +72,13 @@ public class CardView extends ImageView implements Observer {
       return _model;
    }
 
+   public Image getImage_front () {
+      return _image_front;
+   }
+
    @Override
    public String toString () {
       return _model.getColor() + String.valueOf(_model.getValue()) + ", _orientation=" + _orientation + '}';
    }
-   
-   
+
 }

@@ -11,11 +11,11 @@ import Model.CardModel;
  *
  * @author Roman
  */
-public class CardControler {
+public class CardController {
 
    private CardModel _model;
 
-   public CardControler ( CardModel _model ) {
+   public CardController ( CardModel _model ) {
       this._model = _model;
    }
 
