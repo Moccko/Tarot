@@ -16,12 +16,15 @@ public class DeckModel extends Observable {
 
    private ArrayList<CardModel> _cards;
    private Boolean _spread;
+   private final double _x, _y;
    private ROLE _role;
 
-   public DeckModel () {
+   public DeckModel ( int x, int y ) {
       super();
       _cards = new ArrayList<>();
       _spread = false;
+      _x = x;
+      _y = y;
       _role = NONE;
    }
 
@@ -30,8 +33,8 @@ public class DeckModel extends Observable {
       setChanged();
       notifyObservers();
    }
-   
-   public void sort(){
+
+   public void sort () {
       Collections.sort(_cards);
       setChanged();
       notifyObservers();

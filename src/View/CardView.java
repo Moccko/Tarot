@@ -8,8 +8,9 @@ package View;
 import Model.CardModel;
 import static View.ORIENTATION.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.animation.*;
-import javafx.geometry.Point3D;
+import javafx.event.*;
 import javafx.scene.image.*;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -24,12 +25,14 @@ public class CardView extends ImageView implements Observer {
    private CardModel _model;
    private ORIENTATION _orientation;
 
-   public CardView ( CardModel card, String path, ORIENTATION orientation ) {
+   private final String CARDS_DIRECTORY = "./resources/";
+
+   public CardView ( CardModel card, ORIENTATION orientation ) {
 //      super(new Image());
-      Image img = new Image("file:" + path + "BACK.jpg");
+      Image img = new Image("file:" + CARDS_DIRECTORY + "BACK.jpg");
       setImage(img);
       this._model = card;
-      _image_front = new Image("file:" + path + card.getColor() + "_" + card.getValue() + ".jpg");
+      _image_front = new Image("file:" + CARDS_DIRECTORY + card.getColor() + "_" + card.getValue() + ".jpg");
       _orientation = orientation;
       if (orientation == HORIZONTAL) {
 	 setRotate(90);
@@ -44,15 +47,20 @@ public class CardView extends ImageView implements Observer {
       flip();
    }
 
-   public void flip () {
-
+   public Timeline flip () {
+//      RotateTransition rt = new RotateTransition(new Duration(150), this);
+//      rt.setAxis(Rotate.X_AXIS);
+//      rt.setToAngle(90);
+//      this.setImage(_image_front);
+//      rt.setToAngle(180);
+      Timeline tl = new Timeline();
       this.setRotationAxis(Rotate.X_AXIS);
-      Timeline tl = new Timeline(
-	      new KeyFrame(new Duration(1000), new KeyValue(this.rotateProperty(), 90)),
-	      new KeyFrame(new Duration(1000), new KeyValue(this.imageProperty(), _image_front)),
-	      new KeyFrame(new Duration(2000), new KeyValue(this.rotateProperty(), 0)));
-
-      tl.play();
+      tl.getKeyFrames().addAll(
+	      new KeyFrame(new Duration(100), new KeyValue(this.rotateProperty(), 90)),
+	      new KeyFrame(new Duration(100), new KeyValue(this.imageProperty(), _image_front)),
+	      new KeyFrame(new Duration(200), new KeyValue(this.rotateProperty(), 0)));
+      return tl;
+//      return rt;
    }
 
    public void rotate ( ORIENTATION orientation ) {
@@ -66,6 +74,25 @@ public class CardView extends ImageView implements Observer {
 	 _orientation = orientation;
 	 setRotate(90.0d);
       }
+   }
+
+   public TranslateTransition move ( double x, double y /*
+    * double move
+    */ ) {
+//      Timeline tl;
+//      switch (_orientation) {
+//	 case VERTICAL:
+//	    tl = new Timeline(new KeyFrame(new Duration(100), new KeyValue(xProperty(), getX() + move)));
+//	    break;
+//	 default:
+//	    tl = new Timeline(new KeyFrame(new Duration(100), new KeyValue(yProperty(), getY() + move)));
+//	    break;
+//      }
+//      tl.play();
+      TranslateTransition tt = new TranslateTransition(new Duration(50), this);
+      tt.setToX(x);
+      tt.setToY(y);
+      return tt;
    }
 
    public CardModel getModel () {

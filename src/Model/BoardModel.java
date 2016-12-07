@@ -19,15 +19,15 @@ public class BoardModel extends Observable {
    public BoardModel () {
       super();
       _initial_deck = getCards();
-      _dog = new DeckModel();
-      _player_1 = new DeckModel();
-      _player_2 = new DeckModel();
-      _player_3 = new DeckModel();
-      _player_4 = new DeckModel();
+      _dog = new DeckModel(1, 1);
+      _player_1 = new DeckModel(1, 2);
+      _player_2 = new DeckModel(0, 1);
+      _player_3 = new DeckModel(1, 0);
+      _player_4 = new DeckModel(2, 1);
    }
 
    private DeckModel getCards () {
-      DeckModel deck = new DeckModel();
+      DeckModel deck = new DeckModel(0, 0);
       for (int color = 0; color < 5; color++) {
 	 int value = 1;
 	 while (value < 22) {
@@ -62,7 +62,7 @@ public class BoardModel extends Observable {
    public void distribute () {
       CardModel card = new CardModel();
       setChanged();
-      notifyObservers(card); // à voir plus tard
+      notifyObservers(card); // TODO : à voir plus tard
    }
 
    public DeckModel getInitial_deck () {

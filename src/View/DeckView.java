@@ -8,31 +8,33 @@ package View;
 import Controler.DeckController;
 import Model.*;
 import java.util.*;
-import javafx.animation.TranslateTransition;
-import javafx.scene.*;
+import javafx.animation.*;
+import javafx.event.*;
+import javafx.scene.Group;
 import javafx.util.Duration;
 
 /**
  *
  * @author Roman
  */
-public class DeckView extends Group implements Observer {
+public class DeckView extends ArrayList<CardView> implements Observer {
 
    private final DeckModel _model;
-
    private final DeckController _controller;
-   private final String _path;
+   private final double _x, _y;
    private final ORIENTATION _orientation;
+   private boolean _finished;
 
-   public DeckView ( DeckModel deck, DeckController controller, String path, ORIENTATION orientation ) {
+   public DeckView ( DeckModel deck, DeckController controller, double x, double y, ORIENTATION orientation ) {
       super();
       _model = deck;
       _controller = controller;
-      _path = path;
+      _x = x;
+      _y = y;
       _orientation = orientation;
 //      getChildren().clear();
       _model.getCards().forEach(( card ) -> {
-	 getChildren().add(new CardView(card, path, orientation));
+	 add(new CardView(card, orientation));
       }
       );
       deck.addObserver(this);
@@ -73,24 +75,23 @@ public class DeckView extends Group implements Observer {
    }
 
    public void spread () {
-      int cpt = -360;
       switch (_orientation) {
 	 case VERTICAL:
-	    for (Node card : getChildren()) {
-	       CardView cardview = (CardView) card;
-	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), cardview);
-	       tt.setToX(cpt);
-	       tt.play();
+	    int cpt = -360;
+	    for (CardView card : this) {
+	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
+	       tt.setToX(getX() + cpt);
 	       cpt += 40;
+	       tt.play();
 	    }
 	    break;
 	 case HORIZONTAL:
-	    for (Node card : getChildren()) {
-	       CardView cardview = (CardView) card;
-	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), cardview);
-	       tt.setToY(cpt);
-	       tt.play();
+	    cpt = -90;
+	    for (CardView card : this) {
+	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
+	       tt.setToY(getY() + cpt);
 	       cpt += 10;
+	       tt.play();
 	    }
 	    break;
       }
@@ -105,34 +106,72 @@ public class DeckView extends Group implements Observer {
    }
 
    public void flip () {
-      getChildren().forEach(( card ) -> {
-	 CardView carte = (CardView) card;
+      SequentialTransition st = new SequentialTransition();
+      this.forEach(( card ) -> {
 //	 carte.toFront();
-	 carte.flip();
+	 st.getChildren().add(card.flip());
       });
+      st.setCycleCount(1);
+      st.play();
    }
 
-   public void give ( CardView card, DeckView deck ) {
+   public TranslateTransition give ( CardView card, DeckView deck ) {
       _controller.give(card.getModel(), deck.getModel());
       card.rotate(deck.getOrientation());
+      this.remove(card);
 
-      TranslateTransition move = new TranslateTransition(Duration.millis(500), card);
-      move.setToX(deck.getLayoutX());
-      move.play();
-
-      deck.getChildren().add(card);
-      getChildren().remove(card);
+      TranslateTransition tt = new TranslateTransition(new Duration(100), card);
+      tt.setToX(deck.getX());
+      tt.setToY(deck.getY());
+      deck.add(card);
+      return tt;
    }
 
    public CardView getChild ( int i ) {
-      return (CardView) getChildren().get(i);
+      return get(i);
    }
 
    public CardView getLastChild () {
-      return getChild(getChildren().size() - 1);
+      return getChild(this.size() - 1);
    }
 
    public ORIENTATION getOrientation () {
       return _orientation;
+   }
+
+   public double getX () {
+      return _x;
+   }
+
+   public double getY () {
+      return _y;
+   }
+
+   public void setRoot ( Group stack ) {
+      this.forEach(( card ) -> {
+	 stack.getChildren().add(card);
+      });
+   }
+
+   public void setFinished ( boolean _finished ) {
+      this._finished = _finished;
+   }
+
+   public synchronized void distribute ( Collection<DeckView> decks, DeckView dog ) {
+      SequentialTransition st = new SequentialTransition();
+      while (!this.isEmpty()) {
+	 decks.forEach(( deck ) -> {
+	    for (int c = 0; c < 3; c++) {
+	       st.getChildren().add(this.give(this.get(0), deck));
+	    }
+	 });
+	 st.getChildren().add(this.give(this.get(0), dog));
+      }
+      st.play();
+      st.setOnFinished(( ActionEvent event ) -> {
+	 decks.forEach(( deck ) -> {
+	    deck.spread();
+	 });
+      });
    }
 }
