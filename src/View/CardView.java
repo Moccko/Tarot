@@ -8,9 +8,7 @@ package View;
 import Model.CardModel;
 import static View.ORIENTATION.*;
 import java.util.*;
-import java.util.logging.*;
 import javafx.animation.*;
-import javafx.event.*;
 import javafx.scene.image.*;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -22,7 +20,7 @@ import javafx.util.Duration;
 public class CardView extends ImageView implements Observer {
 
    private final Image _image_front;
-   private CardModel _model;
+   private final CardModel _model;
    private ORIENTATION _orientation;
 
    private final String CARDS_DIRECTORY = "./resources/";
