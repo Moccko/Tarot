@@ -5,6 +5,7 @@
  */
 package Model;
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,30 +14,21 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import static Model.COLOR.*;
-
 /**
  *
- * @author mzeferino
+ * @author Margaux
  */
-public class CardTest {
+public class BoardTests {
     
-    public CardTest() {
-    }
+    //TODO: getCards, distribute
     
-    //set visible
-   
-    /**
-     * Test of getColor method, of class Card.
-     */
+    public BoardTests() {}
+    
     @Test
-    public void testGetColor() {
-        System.out.println("getColor");
-        Card instance = new Card(COLOR.SPADE,2);
-        COLOR expResult = COLOR.SPADE;
-        COLOR result = instance.getColor();
-        assertEquals(expResult, result);
+    public void  distribute() 
+    {
+        
     }
 
-  
-    
 }
+

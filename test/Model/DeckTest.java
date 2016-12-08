@@ -34,17 +34,16 @@ public class DeckTest {
     @Test
     public void testGiveCard() {
         System.out.println("giveCard");
-        Card toGive = null;
-        Deck d = null;
-        Deck instance = null;
-        Boolean expResult = null;
-        Boolean result = instance.giveCard(toGive, d);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+       Deck deck = new Deck(0,0);
+       Card card = new Card (COLOR.SPADE, 7);
+       deck.giveCard( card , deck);
+        assertEquals(deck.getCards().getLast(), card);
+  
+        fail("Erreur giveCard DeckModel : la carte donnée n'est pas la même que celle passée en paramètre ");
     }
 
-  
+//set changed
+//notify observers
 
 
     /**
