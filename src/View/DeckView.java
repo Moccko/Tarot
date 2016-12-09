@@ -24,8 +24,9 @@ public class DeckView extends ArrayList<CardView> implements Observer {
    private final double _x, _y;
    private final ORIENTATION _orientation;
    private boolean _finished;
+   private final double _size_max;
 
-   public DeckView ( DeckModel deck, DeckController controller, double x, double y, ORIENTATION orientation ) {
+   public DeckView ( DeckModel deck, DeckController controller, double x, double y, double w, ORIENTATION orientation ) {
       super();
       _model = deck;
       _controller = controller;
@@ -35,8 +36,8 @@ public class DeckView extends ArrayList<CardView> implements Observer {
 //      getChildren().clear();
       _model.getCards().forEach(( card ) -> {
 	 add(new CardView(card, orientation));
-      }
-      );
+      });
+      _size_max = 4 * w / _model.getCards().size(); // the deck occupies 80% of the screen width
       deck.addObserver(this);
    }
 
@@ -74,38 +75,53 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       return _model;
    }
 
-   public void spread () {
-      switch (_orientation) {
-	 case VERTICAL:
-	    int cpt = -360;
-	    for (CardView card : this) {
-	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
-	       tt.setToX(getX() + cpt);
-	       cpt += 40;
-	       tt.play();
-	    }
-	    break;
-	 case HORIZONTAL:
-	    cpt = -90;
-	    for (CardView card : this) {
-	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
-	       tt.setToY(getY() + cpt);
-	       cpt += 10;
-	       tt.play();
-	    }
-	    break;
+   public void spread ( int i ) {
+//      int height = 0;
+      sort();
+      ParallelTransition pt = new ParallelTransition();
+      int cpt;
+//      switch (_orientation) {
+//	 case VERTICAL:
+      cpt = -(this.size() - 1) / 2 * 60; // we center the cards
+      for (CardView card : this) {
+	 TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
+	 tt.setToX(getX() + cpt);
+	 cpt += 60;
+	 pt.getChildren().add(tt);
+	 card.toBack();
       }
+//	    break;
+//	 case HORIZONTAL:
+//	    cpt = -90;
+//	    for (CardView card : this) {
+//	       TranslateTransition tt = new TranslateTransition(Duration.seconds(1), card);
+//	       tt.setToY(getY() + cpt);
+//	       cpt += 10;
+//	       pt.getChildren().add(tt);
+//	       card.toBack();
+//	    }
+//	    break;
+//      }
+      if (i == 1) {
+	 pt.setOnFinished(( event ) -> {
+	    flip();
+//	 reset();
+	 });
+	 pt.play();
+      }
+
    }
 
-   public void shuffle () {
+   private void shuffle () {
       _controller.shuffle();
    }
 
-   public void sort () {
+   private void sort () {
+      this.sort(( CardView o1, CardView o2 ) -> Integer.compare(o1.getModel().getIndex(), o2.getModel().getIndex()));
       _controller.sort();
    }
 
-   public void flip () {
+   private void flip () {
       SequentialTransition st = new SequentialTransition();
       this.forEach(( card ) -> {
 //	 carte.toFront();
@@ -115,24 +131,16 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       st.play();
    }
 
-   public TranslateTransition give ( CardView card, DeckView deck ) {
+   private TranslateTransition give ( CardView card, DeckView deck ) {
       _controller.give(card.getModel(), deck.getModel());
       card.rotate(deck.getOrientation());
       this.remove(card);
 
-      TranslateTransition tt = new TranslateTransition(new Duration(100), card);
+      TranslateTransition tt = new TranslateTransition(new Duration(25), card);
       tt.setToX(deck.getX());
       tt.setToY(deck.getY());
       deck.add(card);
       return tt;
-   }
-
-   public CardView getChild ( int i ) {
-      return get(i);
-   }
-
-   public CardView getLastChild () {
-      return getChild(this.size() - 1);
    }
 
    public ORIENTATION getOrientation () {
@@ -157,11 +165,11 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       this._finished = _finished;
    }
 
-   public synchronized void distribute ( Collection<DeckView> decks, DeckView dog ) {
+   public void distribute ( Collection<DeckView> decks, DeckView dog ) {
       SequentialTransition st = new SequentialTransition();
       while (!this.isEmpty()) {
 	 decks.forEach(( deck ) -> {
-	    for (int c = 0; c < 3; c++) {
+	    for (int card = 0; card < 3; card++) {
 	       st.getChildren().add(this.give(this.get(0), deck));
 	    }
 	 });
@@ -169,9 +177,69 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       }
       st.play();
       st.setOnFinished(( ActionEvent event ) -> {
-	 decks.forEach(( deck ) -> {
-	    deck.spread();
-	 });
+	 int c = 1;
+	 for (DeckView deck : decks) {
+	    deck.spread(c++);
+	 }
+	 dog.spread(1);
       });
    }
+
+   public void reset () {
+      this.sort(( CardView o1, CardView o2 ) -> Integer.compare(o1.getModel().getIndex(), o2.getModel().getIndex()));
+//      fastSort(1, this.size() - 1);
+//      int cpt = -1 * (this.size() / 2);
+//      switch (_orientation) {
+//	 case VERTICAL:
+//	    for (CardView card : this) {
+//	       Timeline tl = new Timeline(new KeyFrame(new Duration(100), new KeyValue(card.xProperty(), this._x + cpt * 50)));
+//	       tl.play();
+//	       cpt++;
+//	    }
+//	    break;
+//	 case HORIZONTAL:
+//	    for (CardView card : this) {
+//	       Timeline tl = new Timeline(new KeyFrame(new Duration(50), new KeyValue(card.yProperty(), this._y + cpt * 50)));
+//	       tl.play();
+//	       cpt++;
+//	    }
+//	    break;
+//      }
+   }
+
+   void exchange ( CardView a, CardView b ) {
+      this.set(0, b);
+      this.set(this.size() - 1, a);
+   }
+
+   void fastSort ( int start, int end ) {
+      int left = start;
+      int right = end;
+      final CardView pivot = this.get(left);
+
+      while (true) {
+	 do {
+	    if (right < start) {
+	       return;
+	    }
+	    right--;
+	 } while (this.get(right).getModel().getIndex() > pivot.getModel().getIndex());
+	 do {
+	    if (left >= end) {
+	       return;
+	    }
+	    left++;
+	 } while (this.get(left).getModel().getIndex() < pivot.getModel().getIndex());
+
+	 if (left < right) {
+	    exchange(this.get(left), this.get(right));
+	 } else {
+	    break;
+	 }
+      }
+
+      fastSort(start, right);
+      fastSort(right + 1, end);
+   }
+
 }

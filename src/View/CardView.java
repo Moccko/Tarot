@@ -36,6 +36,8 @@ public class CardView extends ImageView implements Observer {
 	 setRotate(90);
       }
 
+      setPreserveRatio(true);
+      setFitWidth(100d);
       setCache(true);
       _model.addObserver(this);
    }
