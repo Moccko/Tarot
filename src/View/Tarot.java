@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controler.DeckController;
+import Controller.DeckController;
 import Model.BoardModel;
 import javafx.application.Application;
 

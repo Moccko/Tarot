@@ -56,9 +56,9 @@ public class CardView extends ImageView implements Observer {
       Timeline tl = new Timeline();
       this.setRotationAxis(Rotate.X_AXIS);
       tl.getKeyFrames().addAll(
-	      new KeyFrame(new Duration(100), new KeyValue(this.rotateProperty(), 90)),
-	      new KeyFrame(new Duration(100), new KeyValue(this.imageProperty(), _image_front)),
-	      new KeyFrame(new Duration(200), new KeyValue(this.rotateProperty(), 0)));
+	      new KeyFrame(new Duration(50), new KeyValue(this.rotateProperty(), 90)),
+	      new KeyFrame(new Duration(50), new KeyValue(this.imageProperty(), _image_front)),
+	      new KeyFrame(new Duration(100), new KeyValue(this.rotateProperty(), 0)));
       return tl;
 //      return rt;
    }

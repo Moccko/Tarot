@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controler.DeckController;
+import Controller.DeckController;
 import Model.*;
 import java.util.*;
 import javafx.animation.*;
@@ -136,7 +136,7 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       card.rotate(deck.getOrientation());
       this.remove(card);
 
-      TranslateTransition tt = new TranslateTransition(new Duration(25), card);
+      TranslateTransition tt = new TranslateTransition(new Duration(100), card);
       tt.setToX(deck.getX());
       tt.setToY(deck.getY());
       deck.add(card);
@@ -165,7 +165,7 @@ public class DeckView extends ArrayList<CardView> implements Observer {
       this._finished = _finished;
    }
 
-   public void distribute ( Collection<DeckView> decks, DeckView dog ) {
+   public void distribute ( ArrayList<DeckView> decks, DeckView dog ) {
       SequentialTransition st = new SequentialTransition();
       while (!this.isEmpty()) {
 	 decks.forEach(( deck ) -> {
@@ -176,12 +176,15 @@ public class DeckView extends ArrayList<CardView> implements Observer {
 	 st.getChildren().add(this.give(this.get(0), dog));
       }
       st.play();
-      st.setOnFinished(( ActionEvent event ) -> {
+      st.setOnFinished(( event ) -> {
 	 int c = 1;
 	 for (DeckView deck : decks) {
 	    deck.spread(c++);
 	 }
 	 dog.spread(1);
+	 decks.get(0).activateDragnDrop(true);
+	 dog.activateDragnDrop(false);
+
       });
    }
 
@@ -207,39 +210,30 @@ public class DeckView extends ArrayList<CardView> implements Observer {
 //      }
    }
 
-   void exchange ( CardView a, CardView b ) {
-      this.set(0, b);
-      this.set(this.size() - 1, a);
-   }
+   public void activateDragnDrop ( boolean player ) {
 
-   void fastSort ( int start, int end ) {
-      int left = start;
-      int right = end;
-      final CardView pivot = this.get(left);
+      this.forEach(( card ) -> {
+	 System.out.println(card.getModel().getValue());
+	 if (!player || (player && (card.getModel().getColor() != COLOR.EXCUSE || card.getModel().getValue() != 14))) { // the player can't give the excuse or a king
+	    card.setOnMousePressed(( event ) -> {
+	       card.setX(event.getX() - 50);
+	       card.setY(event.getY() - 50);
+	    });
+	    card.setOnMouseDragged(( event ) -> {
+	       card.setX(event.getX() - 50);
+	       card.setY(event.getY() - 50);
+	    });
 
-      while (true) {
-	 do {
-	    if (right < start) {
-	       return;
-	    }
-	    right--;
-	 } while (this.get(right).getModel().getIndex() > pivot.getModel().getIndex());
-	 do {
-	    if (left >= end) {
-	       return;
-	    }
-	    left++;
-	 } while (this.get(left).getModel().getIndex() < pivot.getModel().getIndex());
-
-	 if (left < right) {
-	    exchange(this.get(left), this.get(right));
-	 } else {
-	    break;
+	    card.setOnMouseReleased(( event ) -> {
+	       /*
+	        * if (card.get)>10)
+	        * {
+	        * //reset();
+	        * }
+	        */
+	    });
 	 }
-      }
-
-      fastSort(start, right);
-      fastSort(right + 1, end);
+      });
    }
 
 }

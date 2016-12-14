@@ -5,15 +5,14 @@
  */
 package View;
 
-import Controler.*;
+import Controller.BoardController;
 import Model.*;
 import java.util.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.*;
 
 /**
@@ -22,20 +21,17 @@ import javafx.stage.*;
  */
 public class BoardView extends Application implements Observer {
 
-   private Group _root, _board;
+   private StackPane _root;
+   private Group _board;
    private double _width;
    private DeckView _initial, _dog, _player_1, _player_2, _player_3, _player_4;
    private ArrayList<DeckView> _decks;
-   private BorderPane _layout;
-
-   private CardView _try_card;
 
    @Override
    public void start ( Stage primaryStage ) throws InterruptedException {
 
-      _root = new Group();
+      _root = new StackPane();
       _board = new Group();
-      Scene scene = new Scene(_board, 1200, 650);
 
       BoardModel _model = new BoardModel();
       BoardController _controller = new BoardController(_model);
@@ -50,7 +46,7 @@ public class BoardView extends Application implements Observer {
       _player_3 = new DeckView(_model.getPlayer_3(), _controller.getPlayer_3(), 550, 0, _width, ORIENTATION.VERTICAL);
       _player_4 = new DeckView(_model.getPlayer_4(), _controller.getPlayer_4(), 1100, 250, _width, ORIENTATION.HORIZONTAL);
 
-      _decks = new ArrayList<>();
+      _decks = new ArrayList<DeckView>();
       _decks.add(_player_1);
       _decks.add(_player_2);
       _decks.add(_player_3);
@@ -60,21 +56,16 @@ public class BoardView extends Application implements Observer {
       _distribute.setOnAction(( ActionEvent event ) -> {
 	 _initial.distribute(_decks, _dog);
       });
+      
 
-//      Button _flip = new Button("Flip !");
-//      _flip.setOnAction(( event ) -> {
-//	 _player_1.flip();
-//	 _dog.flip();
-//	 _try_card.flip();
-//      });
       _initial.setRoot(_board);
       _board.getChildren().add(_distribute);
-//      _root.getChildren().add(_flip);
-
+      _root.getChildren().add(_board);
+      Scene scene = new Scene(_root, 1200, 650);
       primaryStage.setTitle("Tarot Rieunier Zeferino S3A");
       primaryStage.setScene(scene);
       primaryStage.sizeToScene();
-      scene.getStylesheets().add(BoardView.class.getResource("style.css").toExternalForm());
+      scene.getStylesheets().add(View.BoardView.class.getResource("style.css").toExternalForm());
       primaryStage.show();
    }
 

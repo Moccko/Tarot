@@ -1,4 +1,4 @@
-* {
+.board {
    -fx-background-image: url(wallpaper.jpg);
    -fx-background-repeat: stretch;
    -fx-background-size: cover;
